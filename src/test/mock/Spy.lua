@@ -1,9 +1,9 @@
 --- @classmod Spy
 --- Wraps a function and records the calls.
 -- For each call the arguments and return values are saved.
+local pathOfThisFile = (...):match("(.-)[^%.]+$")
 
-
-local ValueMatcher = require 'test.mock.ValueMatcher'
+local ValueMatcher = require(pathOfThisFile..'ValueMatcher')
 
 
 local Spy = {}

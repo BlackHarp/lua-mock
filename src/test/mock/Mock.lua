@@ -1,10 +1,10 @@
 --- @classmod Mock
 --- Combination of Spy and ProgrammableFn.
 -- See @{Spy} and @{ProgrammableFn} for details.
+local pathOfThisFile = (...):match("(.-)[^%.]+$")
 
-
-local ProgrammableFn = require 'test.mock.ProgrammableFn'
-local Spy = require 'test.mock.Spy'
+local ProgrammableFn = require(pathOfThisFile..'ProgrammableFn')
+local Spy = require(pathOfThisFile..'Spy')
 
 
 local Mock = {}

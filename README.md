@@ -7,8 +7,9 @@ Tiny collection of mocking utilities.
 A few examples:
 
 ```lua
-local Spy = require 'test.mock.Spy'
-os.remove = Spy(os.remove)
+package.path = package.path .. ";../?.lua"
+local lua_mock = require('lua-mock.lua-mock')
+os.remove = lua_mock.Spy(os.remove)
 
 RemoveRecusive('example')
 
@@ -20,8 +21,9 @@ os.remove:assertAnyCallMatches{arguments={'example/content'}}
 ```
 
 ```lua
-local Mock = require 'test.mock.Mock'
-os.remove = Mock()
+package.path = package.path .. ";../?.lua"
+local lua_mock = require('lua-mock.lua-mock')
+os.remove = lua_mock.Mock()
 
 os.remove:whenCalled{with={'example/content'}, thenReturn={true}}
 os.remove:whenCalled{with={'example'}, thenReturn={true}}

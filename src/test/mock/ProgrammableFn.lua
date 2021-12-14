@@ -4,9 +4,9 @@
 -- A behaviour consists of a set of arguments and a set of return values.
 -- If the function is called with these arguments it will return the programmed
 -- return values.
+local pathOfThisFile = (...):match("(.-)[^%.]+$")
 
-
-local ValueMatcher = require 'test.mock.ValueMatcher'
+local ValueMatcher = require(pathOfThisFile..'ValueMatcher')
 
 
 local ProgrammableFn = {}
