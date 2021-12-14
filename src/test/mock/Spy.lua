@@ -137,10 +137,10 @@ function Spy:assertAnyCallMatches( query, level )
 end
 
 
-return function(wrappedFn, stub)
+return function(wrappedFn, name, stub)
     local function stubFn(...) end 
     local func = (stub and stubFn) or wrappedFn
-    local self = setmetatable({ wrappedFn = func}, Spy)
+    local self = setmetatable({ wrappedFn = func, name=name}, Spy)
     self:reset()
     return self
 end
