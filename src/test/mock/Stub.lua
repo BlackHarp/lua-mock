@@ -34,8 +34,8 @@ function Stub:assertAnyCallMatches( query )
     return self
 end
 
-return function(wrappedFn)
-    local spy = Spy(wrappedFn, true)
+return function(wrappedFn, name)
+    local spy = Spy(wrappedFn, name, true)
     local self = {
         spy = spy
     }

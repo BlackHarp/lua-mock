@@ -42,9 +42,9 @@ function Mock:assertAnyCallMatches( query )
 end
 
 
-return function()
-    local programmable = ProgrammableFn()
-    local spy = Spy(programmable)
+return function(name)
+    local programmable = ProgrammableFn(name)
+    local spy = Spy(programmable, name)
     local self = {
         programmable = programmable,
         spy = spy

@@ -31,7 +31,7 @@ end
 function ProgrammableFn:__call( ... )
     local behaviour = self:_findMatchingBehaviour({...})
     if not behaviour then
-        error('No matching behaviour for call.', 2)
+        error('No matching behaviour for call '..self.name, 2)
     end
     return behaviourReturnValues(behaviour)
 end
@@ -77,8 +77,9 @@ function ProgrammableFn:reset()
 end
 
 
-return function()
+return function(name)
     local self = {
+        name = name,
         behaviours = {}
     }
     return setmetatable(self, ProgrammableFn)

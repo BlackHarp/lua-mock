@@ -13,6 +13,7 @@ Spy.__index = Spy
 function Spy:__call( ... )
     local returnValues = { self.wrappedFn(...) }
     local call = {
+        name = self.name,
         arguments = {...},
         returnValues = returnValues
     }
@@ -28,7 +29,7 @@ end
 --- Test if the spy was called exactly `count` times.
 function Spy:assertCallCount( count )
     if #self.calls ~= count then
-        error('Should be called '..count..' times, but was called '..#self.calls..' times.', 2)
+        error(self.name..' should be called '..count..' times, but was called '..#self.calls..' times.', 2)
     end
     return self
 end
@@ -42,7 +43,7 @@ function Spy:_getSelectedCalls( query, level )
         if call then
             table.insert(selectedCalls, call)
         else
-            error('No call at index '..query.atIndex..'.  Recorded only '..#self.calls..' calls.', level+1)
+            error('No '..self.name..' call at index '..query.atIndex..'.  Recorded only '..#self.calls..' calls.', level+1)
         end
     end
 
@@ -136,8 +137,10 @@ function Spy:assertAnyCallMatches( query, level )
 end
 
 
-return function( wrappedFn )
-    local self = setmetatable({ wrappedFn = wrappedFn }, Spy)
+return function(wrappedFn, stub)
+    local function stubFn(...) end 
+    local func = (stub and stubFn) or wrappedFn
+    local self = setmetatable({ wrappedFn = func}, Spy)
     self:reset()
     return self
 end

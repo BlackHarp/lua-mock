@@ -9,7 +9,7 @@ A few examples:
 ```lua
 package.path = package.path .. ";../?.lua"
 local lua_mock = require('lua-mock.lua-mock')
-os.remove = lua_mock.Spy(os.remove)
+os.remove = lua_mock.Spy(os.remove, "os.remove()")
 
 RemoveRecusive('example')
 
@@ -23,7 +23,7 @@ os.remove:assertAnyCallMatches{arguments={'example/content'}}
 ```lua
 package.path = package.path .. ";../?.lua"
 local lua_mock = require('lua-mock.lua-mock')
-os.remove = lua_mock.Stub(os.remove)
+os.remove = lua_mock.Stub(os.remove, "os.remove()")
 
 RemoveRecusive('example')
 
@@ -37,7 +37,7 @@ os.remove:assertAnyCallMatches{arguments={'example/content'}}
 ```lua
 package.path = package.path .. ";../?.lua"
 local lua_mock = require('lua-mock.lua-mock')
-os.remove = lua_mock.Mock()
+os.remove = lua_mock.Mock("os.remove()")
 
 os.remove:whenCalled{with={'example/content'}, thenReturn={true}}
 os.remove:whenCalled{with={'example'}, thenReturn={true}}
