@@ -2,11 +2,13 @@
 --- Wraps all modules.
 local pathOfThisFile = (...):match("(.-)[^%.]+$")
 local Spy = require(pathOfThisFile..'src.test.mock.Spy')
+local Stub = require(pathOfThisFile..'src.test.mock.Stub')
 local Mock = require(pathOfThisFile..'src.test.mock.Mock')
 
 local M = {}
 
 M.Spy = Spy
+M.Stub = Stub
 M.Mock = Mock
 
 return M
