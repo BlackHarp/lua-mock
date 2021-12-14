@@ -12,6 +12,19 @@ local ValueMatcher = require(pathOfThisFile..'ValueMatcher')
 local ProgrammableFn = {}
 ProgrammableFn.__index = ProgrammableFn
 
+local function traceback()
+    local level = 1
+    while true do
+        local info = debug.getinfo(level, "Sl")
+        if not info then break end
+        if info.what == "C" then   -- is a C function?
+            print(level, "C function")
+        else   -- a Lua function
+            print(string.format("[%s]:%d", info.short_src, info.currentline))
+        end
+        level = level + 1
+    end
+end
 
 local function behaviourReturnValues( behaviour )
     local next = behaviour.nextReturnSet
@@ -31,6 +44,7 @@ end
 function ProgrammableFn:__call( ... )
     local behaviour = self:_findMatchingBehaviour({...})
     if not behaviour then
+        -- traceback()
         error('No matching behaviour for call '..self.name, 2)
     end
     return behaviourReturnValues(behaviour)
