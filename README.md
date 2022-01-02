@@ -37,7 +37,7 @@ os.remove:assertAnyCallMatches{arguments={'example/content'}}
 ```lua
 package.path = package.path .. ";../?.lua"
 local lua_mock = require('lua-mock.lua-mock')
-os.remove = lua_mock.Mock("os.remove()")
+os.remove = lua_mock.Mock(os.remove, "os.remove()")
 
 os.remove:whenCalled{with={'example/content'}, thenReturn={true}}
 os.remove:whenCalled{with={'example'}, thenReturn={true}}
@@ -46,6 +46,8 @@ os.remove:whenCalled{thenReturn={nil, 'No such file.'}}
 RemoveRecusive('example')
 
 os.remove:assertAnyCallMatches{arguments={'example/content'}}
+
+os.remove = os.remove:reset()
 ```
 
 

@@ -23,7 +23,7 @@ end
 function Mock:reset()
     self.spy:reset()
     self.programmable:reset()
-    return self
+    return self.realFunc
 end
 
 function Mock:assertCallCount( count )
@@ -42,10 +42,11 @@ function Mock:assertAnyCallMatches( query )
 end
 
 
-return function(name)
+return function(wrappedFn, name)
     local programmable = ProgrammableFn(name)
     local spy = Spy(programmable, name)
     local self = {
+        realFunc = wrappedFn,
         programmable = programmable,
         spy = spy
     }
