@@ -26,6 +26,19 @@ local function traceback()
     end
 end
 
+local function dump(o)
+    if type(o) == 'table' then
+       local s = '{ '
+       for k,v in pairs(o) do
+          if type(k) ~= 'number' then k = '"'..k..'"' end
+          s = s .. '['..k..'] = ' .. dump(v) .. ','
+       end
+       return s .. '} '
+    else
+       return tostring(o)
+    end
+ end
+ 
 local function behaviourReturnValues( behaviour )
     local next = behaviour.nextReturnSet
 
@@ -45,13 +58,15 @@ function ProgrammableFn:__call( ... )
     local behaviour = self:_findMatchingBehaviour({...})
     if not behaviour then
         -- traceback()
-        error('No matching behaviour for call '..self.name, 2)
+        error('No matching behaviour for call '..self.name..'\n'..dump(...), 2)
     end
     return behaviourReturnValues(behaviour)
 end
 
 function ProgrammableFn:_findMatchingBehaviour( arguments )
+    -- print("arguments: "..dump(arguments))
     for _,behaviour in ipairs(self.behaviours) do
+        -- print("behavior[".._.."]: "..dump(behaviour.arguments))
         if ValueMatcher.matches(arguments, behaviour.arguments) then
             return behaviour
         end
