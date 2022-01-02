@@ -50,6 +50,18 @@ os.remove:assertAnyCallMatches{arguments={'example/content'}}
 os.remove = os.remove:reset()
 ```
 
+```lua
+package.path = package.path .. ";../?.lua"
+local lua_mock = require('lua-mock.lua-mock')
+os.time = lua_mock.Mock(os.time, "os.date()")
+
+os.time:whenCalled{with={{year=2021, month=12, day=1}}, thenReturn={1638306000}}
+
+RecusiveTableMatch('example')
+
+os.time = os.time:reset()
+```
+
 
 Author
 ------

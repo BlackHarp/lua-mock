@@ -34,13 +34,22 @@ local function createEqualityMatcher( matchedValue )
     end)
 end
 
+-- matchValues function declaration is needed here to call it from createTableMatcher
+local matchValues
+local tableMatchMaxDepth = 5
+local tableMatchDepth = 0
+
 local function createTableMatcher( matchedTable )
     return createMatcher(function( value )
         if value == matchedTable then
             return true
         elseif type(value) == 'table' then
-            -- TODO
-            return false, 'Can\'t recursively match tables at the moment.'
+            if tableMatchDepth > tableMatchMaxDepth then
+                return false, 'Match tables recursively up to 5th depth.'
+            else
+                tableMatchDepth = tableMatchDepth + 1
+                return matchValues( value, matchedTable )
+            end
         else
             return false, valueMismatchMessage:format(tostring(value),
                                                       tostring(matchedTable))
@@ -72,7 +81,7 @@ end
 --- Tests multiple values.
 -- Like a #matchValue it returns `true` if all values matched or `false` with
 -- the according index and an error message if a value did not match.
-local function matchValues( values, matchedValues )
+matchValues = function( values, matchedValues )
     typeName = typeName or 'Value'
 
     if #values ~= #matchedValues then
@@ -106,6 +115,7 @@ local ValueMatcher = {}
 -- `true` if all values match or `false` if at least one don't.
 -- Also returns the value index and a reason when failing.
 function ValueMatcher.matches( value, matchedValues )
+    tableMatchDepth = 0
     return matchValues(value, matchedValues)
 end
 
